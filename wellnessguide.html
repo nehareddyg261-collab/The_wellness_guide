@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Wellness Guide — Habits for a Healthier Life</title>
+  <link rel="stylesheet" href="D:\project\html\styleguide.css" />
+</head>
+<body>
+
+
+<div id="login-page" class="login-page">
+  <div class="login-card">
+    <div class="login-emoji">🌸</div>
+    <h1 class="login-title">Wellness Guide</h1>
+    <p class="login-sub">Habits for a healthier life.</p>
+    <label class="inp-label">Your Name</label>
+    <input class="inp" id="username-inp" type="text" placeholder="type your name" />
+    <label class="inp-label">Password</label>
+    <input class="inp" id="password-inp" type="password" placeholder="enter your password" />
+    <div class="auth-toggle">
+  <button id="btn-login-tab" class="active" onclick="setAuthMode('login')">Log In</button>
+  <button id="btn-signup-tab" onclick="setAuthMode('signup')">Sign Up</button>
+</div>
+<div id="confirm-wrap">
+  <label class="inp-label">Confirm Password</label>
+  <input class="inp" id="confirm-inp" type="password" placeholder="repeat your password" />
+</div>
+<button class="btn-main" id="auth-btn" onclick="handleAuth()">Begin My Journey →</button>
+<p class="auth-error" id="auth-error"></p>
+    <p class="login-hint">No judgment. No pressure. Just care. 🌿</p>
+  </div>
+</div>
+
+
+<div id="app-page" class="app-page hidden">
+
+  
+  <nav class="nav">
+    <span class="nav-brand">Wellness Guide, habits for a healthier life</em> 🌸</span>
+    <div class="nav-right">
+      <span class="nav-user" id="nav-user">Hey, Friend 👋</span>
+      <button class="btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  
+  <div class="tabs">
+    <button class="tab active" id="tab-physical" onclick="switchTab('physical')">🏃 Physical Health</button>
+    <button class="tab inactive" id="tab-mental"   onclick="switchTab('mental')">🧠 Mental Health</button>
+    <button class="tab inactive" id="tab-hobbies"  onclick="switchTab('hobbies')">🎨 My Hobbies</button>
+  </div>
+
+  <div class="main">
+
+    
+    <div class="hero">
+      <p class="hero-greeting" id="hero-date"></p>
+      <h2 class="hero-title" id="hero-title">Move, rest &amp; nourish your body 🌿</h2>
+      <p class="hero-sub" id="hero-sub">Small consistent habits beat grand gestures every time. You don't need to be perfect — just present.</p>
+    </div>
+
+    
+    <div class="fact-box" onclick="nextFact()">
+      <div class="fact-icon">💡</div>
+      <div>
+        <div class="fact-label">Fun Fact — tap for more</div>
+        <div class="fact-text" id="fact-text">Loading…</div>
+      </div>
+    </div>
+
+    
+    <div id="section-physical">
+      <p class="section-title">Daily Tips</p>
+      <div class="tips-grid" id="physical-tips"></div>
+
+      <p class="section-title">Today's Tracker</p>
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-label-text">Daily Progress</span>
+          <span class="progress-count" id="phys-count">0/4 done</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar" id="phys-bar" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="tracker-wrap" id="physical-tracker"></div>
+    </div>
+
+    
+    <div id="section-mental" class="hidden">
+      <p class="section-title">Daily Tips</p>
+      <div class="tips-grid" id="mental-tips"></div>
+
+      <div class="mood-wrap">
+        <p class="section-title" style="margin-bottom:4px">How are you feeling today?</p>
+        <p class="mood-sub">No wrong answer. Just check in. 💛</p>
+        <div class="mood-row" id="mood-row"></div>
+        <p class="mood-result hidden" id="mood-result"></p>
+      </div>
+
+      <p class="section-title">Today's Tracker</p>
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-label-text">Daily Progress</span>
+          <span class="progress-count" id="ment-count">0/4 done</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar" id="ment-bar" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="tracker-wrap" id="mental-tracker"></div>
+    </div>
+
+    
+    <div id="section-hobbies" class="hidden">
+      <p class="section-title">Add a New Hobby</p>
+      <div class="hobby-add-wrap">
+        <div class="hobby-add-row">
+          <select class="select-inp" id="hobby-emoji-sel"></select>
+          <input class="reminder-inp" id="hobby-name-inp" placeholder="Hobby name…" />
+          <select class="select-inp" id="hobby-mins-sel">
+            <option value="5">5 min</option>
+            <option value="10">10 min</option>
+            <option value="15">15 min</option>
+            <option value="20" selected>20 min</option>
+            <option value="30">30 min</option>
+            <option value="45">45 min</option>
+            <option value="60">60 min</option>
+          </select>
+          <button class="btn-add" onclick="addHobby()">+ Add</button>
+        </div>
+        <p class="hobby-hint">💡 Click a card to mark it active. Hover to delete.</p>
+      </div>
+      <p class="section-title">My Hobby Collection</p>
+      <div class="hobby-grid" id="hobby-grid"></div>
+    </div>
+
+    
+    <p class="section-title">⏰ Reminders</p>
+    <div class="reminder-wrap">
+      <div id="notif-banner" class="notif-banner hidden">
+  🔔 Enable notifications so we can remind you at the right time!
+  <button onclick="requestNotifPermission()">Allow</button>
+</div>
+      <div class="reminder-add">
+        <input class="reminder-inp" id="rem-text-inp" placeholder="Add a reminder…" onkeydown="if(event.key==='Enter') addReminder()" />
+        <input class="reminder-inp" id="rem-time-inp" type="time" value="09:00" style="max-width:115px" />
+        <button class="btn-add" onclick="addReminder()">+ Set</button>
+      </div>
+      <div class="reminder-list" id="reminder-list"></div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="toast hidden" id="toast"></div>
+
+<script>
+
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const physicalTips = [
+  { emoji:"💧", title:"Hydrate First",   text:"Drink a glass of water within 5 minutes of waking — your body dehydrates overnight!" },
+  { emoji:"🚶", title:"10-Minute Walk",  text:"A brisk 10-min walk boosts mood by 20% and improves focus for hours afterward." },
+  { emoji:"🧘", title:"Stretch Daily",   text:"Even 5 minutes of morning stretching signals your nervous system to relax." },
+  { emoji:"🍽️", title:"Balanced Plate", text:"Fill half your plate with veggies, a quarter with protein, and a quarter with whole grains for steady energy." },
+  { emoji:"😴", title:"Bedtime",         text:"Dim lights 1 hour before bed. Your melatonin production triples in darkness." },
+  { emoji:"🌬️", title:"Calm Breathing", text:"Inhale 4s → hold 4s → exhale 4s → hold 4s. A simple technique to reset your nervous system anytime." },
+];
+
+const mentalTips = [
+  { emoji:"📓", title:"3 Good Things",      text:"Write 3 gratitudes each night — rewires your brain toward positivity in 21 days." },
+  { emoji:"🌿", title:"Nature Dose",        text:"20 minutes in nature lowers cortisol as effectively as some anti-anxiety meds." },
+  { emoji:"📵", title:"Phone-Free Morning", text:"Delay checking your phone 30 mins after waking. Start the day on your terms." },
+  { emoji:"🎵", title:"Music Therapy",      text:"60 BPM lo-fi music syncs your brain to alpha waves — the relaxed-focus state." },
+  { emoji:"🤗", title:"Self-Compassion",    text:"Ask: 'What would I say to a friend?' — then say it to yourself. It works." },
+  { emoji:"🧩", title:"Creative Play",      text:"15 minutes of unstructured creative time daily reduces burnout risk by 30%." },
+];
+
+const facts = {
+  physical: [
+    "Your body replaces about 330 billion cells every single day! 🌱",
+    "Laughing 100 times burns as many calories as 10 minutes on a rowing machine. 😄",
+    "Walking barefoot on grass can reduce cortisol levels within just 30 minutes.",
+    "Your heart beats about 100,000 times per day — show it some love! ❤️",
+  ],
+  mental: [
+    "Your brain creates new neurons every day — right habits supercharge this! 🧠✨",
+    "Crying releases stress hormones. It's biological self-care. 💙",
+    "The average person has 6,200 thoughts per day. Mindfulness helps break loops.",
+    "Hugging for 20+ seconds releases oxytocin — the 'belonging' hormone. 🤗",
+  ],
+  hobbies: [
+    "People with hobbies are 34% less likely to experience stress and depression.",
+    "Engaging in a hobby for 30 mins/week dramatically boosts life satisfaction! ✨",
+    "Learning any new skill at any age strengthens neural pathways.",
+    "Flow state (deep hobby focus) is one of the most powerful mood-boosters known to science. 🌊",
+  ],
+};
+
+const heroContent = {
+  physical: { title:"Move, rest &amp; nourish your body 🌿", sub:"Small consistent habits beat grand gestures. You don't need to be perfect — just present." },
+  mental:   { title:"Nurture your inner world 💙",           sub:"Your thoughts are not facts. Your feelings are valid. Taking care of your mind is never selfish." },
+  hobbies:  { title:"Do more of what lights you up ✨",      sub:"Hobbies aren't a luxury — they're medicine for the soul." },
+};
+
+const hobbyEmojis = ["🎸","🎯","🧶","🎭","🏄","🎲","🖼️","💃","🧁","🎤","📸","🏹","🎻","🧩","🌊","🎪","🧗","🪴","🎬","🏊"];
+const moods = ["😔 Low","😐 Okay","🙂 Good","😊 Great","🌟 Glowing"];
+
+const DEFAULT_TRACKERS = {
+  physical: [
+    { id:1, emoji:"💧", name:"Drink 8 glasses of water", meta:"Daily goal",            done:false, streak:0 },
+    { id:2, emoji:"🚶", name:"Move for 30 minutes",      meta:"Any activity counts!",  done:false, streak:0 },
+    { id:3, emoji:"😴", name:"Sleep 7–8 hours",          meta:"Consistency is key",    done:false, streak:0 },
+    { id:4, emoji:"🥗", name:"Eat a veggie-rich meal",   meta:"Rainbow on your plate", done:false, streak:0 },
+  ],
+  mental: [
+    { id:1, emoji:"📓", name:"Write 3 gratitudes",  meta:"Morning or night",    done:false, streak:0 },
+    { id:2, emoji:"🧘", name:"Meditate 5 minutes",  meta:"Breath awareness",    done:false, streak:0 },
+    { id:3, emoji:"📵", name:"Phone-free morning",  meta:"First 30 mins",       done:false, streak:0 },
+    { id:4, emoji:"😊", name:"Do something kind",   meta:"For yourself/others", done:false, streak:0 },
+  ],
+};
+
+const DEFAULT_HOBBIES = [
+  { id:1, emoji:"🎨", name:"Drawing",    tip:"Doodle for 10 minutes to enter a beautiful flow state.", mins:15, active:false },
+  { id:2, emoji:"🌱", name:"Gardening",  tip:"Touching soil releases serotonin naturally!",            mins:20, active:false },
+  { id:3, emoji:"📚", name:"Reading",    tip:"6 minutes of reading reduces stress by 68%!",            mins:30, active:false },
+  { id:4, emoji:"🍳", name:"Cooking",    tip:"Cooking mindfully is a form of meditation.",             mins:25, active:false },
+  { id:5, emoji:"🎮", name:"Gaming",     tip:"Puzzle games improve working memory!",                   mins:20, active:false },
+  { id:6, emoji:"✍️", name:"Journaling", tip:"Write freely for 5 mins — no rules, just flow.",        mins:10, active:false },
+];
+
+const DEFAULT_REMINDERS = [
+  { id:1, text:"Drink water 💧",       time:"08:00", done:false },
+  { id:2, text:"Evening walk 🚶",      time:"18:30", done:false },
+  { id:3, text:"Gratitude journal ✍️", time:"21:00", done:false },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let currentTab = "physical", factIdx = 0, toastTimer = null;
+let authMode = "login";
+let currentUser = null;
+let trackers, hobbies, reminders, reminderTimers = {};
+
+// ── STORAGE HELPERS ───────────────────────────────────────────────────────────
+const users = JSON.parse(localStorage.getItem('wg_users') || '{}');
+
+function saveUserData() {
+  if (!currentUser) return;
+  const data = { trackers, hobbies, reminders };
+  localStorage.setItem('wg_data_' + currentUser, JSON.stringify(data));
+}
+
+function loadUserData() {
+  const raw = localStorage.getItem('wg_data_' + currentUser);
+  if (raw) {
+    const data = JSON.parse(raw);
+    trackers  = data.trackers;
+    hobbies   = data.hobbies;
+    reminders = data.reminders;
+  } else {
+    // First login — use defaults (deep copy so defaults stay clean)
+    trackers  = JSON.parse(JSON.stringify(DEFAULT_TRACKERS));
+    hobbies   = JSON.parse(JSON.stringify(DEFAULT_HOBBIES));
+    reminders = JSON.parse(JSON.stringify(DEFAULT_REMINDERS));
+  }
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+function setAuthMode(mode) {
+  authMode = mode;
+  document.getElementById('btn-login-tab').classList.toggle('active', mode === 'login');
+  document.getElementById('btn-signup-tab').classList.toggle('active', mode === 'signup');
+  document.getElementById('confirm-wrap').classList.toggle('hidden', mode === 'login');
+  document.getElementById('auth-btn').textContent = mode === 'login' ? 'Begin My Journey →' : 'Create Account →';
+  document.getElementById('auth-error').textContent = '';
+}
+
+function handleAuth() {
+  const name = document.getElementById('username-inp').value.trim();
+  const pass = document.getElementById('password-inp').value;
+  const err  = document.getElementById('auth-error');
+  if (!name || !pass) { err.textContent = "Please fill in all fields."; return; }
+
+  if (authMode === 'signup') {
+    const confirm = document.getElementById('confirm-inp').value;
+    if (pass !== confirm) { err.textContent = "Passwords don't match."; return; }
+    if (users[name.toLowerCase()]) { err.textContent = "Name already taken. Try logging in!"; return; }
+    users[name.toLowerCase()] = pass;
+    localStorage.setItem('wg_users', JSON.stringify(users));
+    showToast("🎉 Account created! Welcome, " + name.split(' ')[0] + "!");
+  } else {
+    const stored = users[name.toLowerCase()];
+    if (!stored || stored !== pass) { err.textContent = "Name or password incorrect."; return; }
+  }
+
+  currentUser = name.toLowerCase();
+  loadUserData();
+  document.getElementById('nav-user').textContent = `Hey, ${name.split(' ')[0]} 👋`;
+  document.getElementById('login-page').classList.add('hidden');
+  document.getElementById('app-page').classList.remove('hidden');
+  err.textContent = '';
+  init();
+}
+
+function logout() {
+  saveUserData();
+  clearAllReminderTimers();
+  currentUser = null;
+  document.getElementById('app-page').classList.add('hidden');
+  document.getElementById('login-page').classList.remove('hidden');
+  document.getElementById('username-inp').value = '';
+  document.getElementById('password-inp').value = '';
+  document.getElementById('confirm-inp').value = '';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+function init() {
+  document.getElementById('hero-date').textContent =
+    new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+  buildTips('physical-tips', physicalTips);
+  buildTips('mental-tips', mentalTips);
+  buildTrackers('physical');
+  buildTrackers('mental');
+  buildMoodButtons();
+  document.getElementById('hobby-emoji-sel').innerHTML = hobbyEmojis.map(e => `<option value="${e}">${e}</option>`).join('');
+  buildHobbies();
+  buildReminders();
+  setFact();
+  checkNotifPermission();
+  document.getElementById('hobby-name-inp').addEventListener('keydown', e => { if(e.key==='Enter') addHobby(); });
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab; factIdx = 0;
+  ['physical','mental','hobbies'].forEach(t => {
+    document.getElementById('section-'+t).classList.toggle('hidden', t !== tab);
+    const b = document.getElementById('tab-'+t);
+    b.classList.toggle('active', t === tab);
+    b.classList.toggle('inactive', t !== tab);
+  });
+  const h = heroContent[tab];
+  document.getElementById('hero-title').innerHTML = h.title;
+  document.getElementById('hero-sub').textContent = h.sub;
+  setFact();
+}
+
+// ── FACTS ─────────────────────────────────────────────────────────────────────
+function setFact() {
+  document.getElementById('fact-text').textContent = facts[currentTab][factIdx % facts[currentTab].length];
+}
+function nextFact() { factIdx = (factIdx + 1) % facts[currentTab].length; setFact(); }
+
+// ── TIPS ──────────────────────────────────────────────────────────────────────
+function buildTips(id, tips) {
+  document.getElementById(id).innerHTML = tips.map(t =>
+    `<div class="tip-card"><span class="tip-emoji">${t.emoji}</span><div class="tip-title">${t.title}</div><div class="tip-text">${t.text}</div></div>`
+  ).join('');
+}
+
+// ── TRACKERS ──────────────────────────────────────────────────────────────────
+function buildTrackers(s) {
+  document.getElementById(s+'-tracker').innerHTML = trackers[s].map(t =>
+    `<div class="tracker-row">
+      <div class="tracker-left">
+        <span class="tracker-emoji">${t.emoji}</span>
+        <div><div class="tracker-name">${t.name}</div><div class="tracker-meta">${t.meta}</div></div>
+      </div>
+      <div class="tracker-right">
+        ${t.streak > 0 ? `<span class="streak">🔥 ${t.streak}</span>` : ''}
+        <button class="check-btn ${t.done ? 'done' : ''}" onclick="toggleTracker('${s}',${t.id})">${t.done ? '✓' : ''}</button>
+      </div>
+    </div>`
+  ).join('');
+  updateProgress(s);
+}
+
+function toggleTracker(s, id) {
+  const t = trackers[s].find(x => x.id === id);
+  t.done = !t.done;
+  if (t.done) { t.streak++; showToast("✨ Great job checking that off!"); }
+  buildTrackers(s);
+  saveUserData();
+}
+
+function updateProgress(s) {
+  const done = trackers[s].filter(t => t.done).length, total = trackers[s].length;
+  const prefix = s === 'physical' ? 'phys' : 'ment';
+  document.getElementById(prefix+'-count').textContent = `${done}/${total} done`;
+  document.getElementById(prefix+'-bar').style.width = Math.round(done/total*100) + '%';
+}
+
+// ── MOOD ──────────────────────────────────────────────────────────────────────
+function buildMoodButtons() {
+  document.getElementById('mood-row').innerHTML = moods.map(m =>
+    `<button class="mood-btn" onclick="selectMood(this,'${m}')">${m}</button>`
+  ).join('');
+}
+function selectMood(btn, m) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const r = document.getElementById('mood-result');
+  r.textContent = `Today you felt: ${m} — and that's perfectly okay. 🌸`;
+  r.classList.remove('hidden');
+  showToast(`Logged: ${m} 💙`);
+}
+
+// ── REMINDERS + NOTIFICATIONS ─────────────────────────────────────────────────
+function checkNotifPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    document.getElementById('notif-banner').classList.remove('hidden');
+  } else if (Notification.permission === 'granted') {
+    scheduleAllReminders();
+  }
+}
+
+function requestNotifPermission() {
+  Notification.requestPermission().then(p => {
+    document.getElementById('notif-banner').classList.add('hidden');
+    if (p === 'granted') { scheduleAllReminders(); showToast("🔔 Notifications enabled!"); }
+    else showToast("Notifications blocked. You can change this in browser settings.");
+  });
+}
+
+function scheduleAllReminders() { reminders.forEach(r => scheduleReminder(r)); }
+
+function scheduleReminder(r) {
+  if (Notification.permission !== 'granted' || r.done) return;
+  if (reminderTimers[r.id]) clearTimeout(reminderTimers[r.id]);
+  const now = new Date();
+  const [h, m] = r.time.split(':').map(Number);
+  const fire = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0, 0);
+  if (fire <= now) return;
+  reminderTimers[r.id] = setTimeout(() => {
+    new Notification("🌸 Wellness Reminder", { body: r.text });
+    showToast("🔔 " + r.text);
+  }, fire - now);
+}
+
+function clearAllReminderTimers() {
+  Object.values(reminderTimers).forEach(clearTimeout);
+  reminderTimers = {};
+}
+
+function buildReminders() {
+  document.getElementById('reminder-list').innerHTML = reminders.map(r =>
+    `<div class="reminder-item ${r.done ? 'done-r' : ''}">
+      <div class="rem-left" onclick="toggleReminder(${r.id})">
+        <span>${r.done ? '✅' : '🔔'}</span>
+        <span>${r.text}</span>
+        <span class="rem-time">${r.time}</span>
+      </div>
+      <button class="rem-del" onclick="deleteReminder(${r.id})">✕</button>
+    </div>`
+  ).join('');
+}
+
+function addReminder() {
+  const text = document.getElementById('rem-text-inp').value.trim();
+  const time = document.getElementById('rem-time-inp').value;
+  if (!text) return;
+  const r = { id: Date.now(), text, time, done: false };
+  reminders.push(r);
+  document.getElementById('rem-text-inp').value = '';
+  buildReminders();
+  scheduleReminder(r);
+  saveUserData();
+  showToast("⏰ Reminder set for " + time + "!");
+}
+
+function toggleReminder(id) {
+  const r = reminders.find(x => x.id === id);
+  r.done = !r.done;
+  buildReminders();
+  saveUserData();
+}
+
+function deleteReminder(id) {
+  if (reminderTimers[id]) { clearTimeout(reminderTimers[id]); delete reminderTimers[id]; }
+  reminders = reminders.filter(r => r.id !== id);
+  buildReminders();
+  saveUserData();
+}
+
+// ── HOBBIES ───────────────────────────────────────────────────────────────────
+function buildHobbies() {
+  document.getElementById('hobby-grid').innerHTML = hobbies.map(h =>
+    `<div class="hobby-card ${h.active ? 'active-h' : ''}" onclick="toggleHobby(${h.id})">
+      <button class="hobby-del" onclick="event.stopPropagation();deleteHobby(${h.id})">✕</button>
+      <span class="hobby-emoji-big">${h.emoji}</span>
+      <div class="hobby-name">${h.name}</div>
+      <div class="hobby-tip">${h.tip}</div>
+      <div class="hobby-min">⏱ ${h.mins} min session</div>
+      ${h.active ? '<div class="hobby-active-badge">✓ Active today</div>' : ''}
+    </div>`
+  ).join('');
+}
+
+function addHobby() {
+  const name = document.getElementById('hobby-name-inp').value.trim();
+  if (!name) return;
+  hobbies.push({ id: Date.now(), emoji: document.getElementById('hobby-emoji-sel').value, name,
+    tip: "Your new favorite thing to explore!", mins: parseInt(document.getElementById('hobby-mins-sel').value), active: false });
+  document.getElementById('hobby-name-inp').value = '';
+  buildHobbies();
+  saveUserData();
+  showToast("🎉 New hobby added!");
+}
+
+function toggleHobby(id) {
+  const h = hobbies.find(x => x.id === id);
+  h.active = !h.active;
+  if (h.active) showToast(`${h.emoji} Enjoy your ${h.name} session!`);
+  buildHobbies();
+  saveUserData();
+}
+
+function deleteHobby(id) {
+  hobbies = hobbies.filter(h => h.id !== id);
+  buildHobbies();
+  saveUserData();
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.remove('hidden');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.add('hidden'), 2800);
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  ['username-inp','password-inp','confirm-inp'].forEach(id =>
+    document.getElementById(id).addEventListener('keydown', e => { if(e.key==='Enter') handleAuth(); })
+  );
+  setAuthMode('login');
+});
+</script>
+</body>
+</html>
